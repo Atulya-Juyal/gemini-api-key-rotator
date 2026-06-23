@@ -12,51 +12,15 @@ A production-ready, lightweight reverse proxy written in Node.js and TypeScript.
 These diagrams outline how the proxy leases keys and manages forwarding/retry states:
 
 #### 1. Key Selection & Cooldown Management
-```mermaid
-graph LR
-    A[Request Received] --> B[KeyManager: getNextAvailableKey]
-    B --> C{Key in Cooldown?}
-    C -- Yes --> D{60s Elapsed?}
-    D -- Yes --> E[Reset Cooldown & Lease Key]
-    D -- No --> F[Select Next Key in Pool]
-    F --> B
-    C -- No --> G[Lease Key]
-    E --> H[Key Leased]
-    G --> H
-```
+![Key Selection and Cooldown Management](docs/images/diagram1.svg)
 
 #### 2. Request Forwarding & Retry Loop
-```mermaid
-graph LR
-    H[Key Leased] --> I[Forward Request to Google Gemini]
-    I --> J{HTTP Response Status?}
-    J -- 200 / 4xx / 5xx --> K[Forward Response to Client]
-    J -- 429 Rate Limit --> L[Flag Key as Cooling Down]
-    L --> M{Attempts < 3?}
-    M -- Yes --> N[Lease Next Key]
-    N --> I
-    M -- No --> O[Return 502 Bad Gateway]
-```
+![Request Forwarding and Retry Loop](docs/images/diagram2.svg)
 
 ### System Architecture Sequence
 Shows how the client, proxy, and Google Gemini API interact during a rate limit retry event:
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant Client as Client (OpenClaw / SDK)
-    participant Proxy as Key Rotation Proxy
-    participant Gemini as Google Gemini API
-
-    Client->>Proxy: POST /v1/models/gemini-1.5-flash:generateContent (Dummy Key)
-    Note over Proxy: Leases Key A from Pool
-    Proxy->>Gemini: POST ...?key=KeyA
-    Gemini-->>Proxy: HTTP 429 Too Many Requests
-    Note over Proxy: Quarantines Key A (60s Cooldown)<br/>Leases Key B
-    Proxy->>Gemini: POST ...?key=KeyB (Retry #1)
-    Gemini-->>Proxy: HTTP 200 OK
-    Proxy-->>Client: HTTP 200 OK (With response payload)
-```
+![System Architecture Sequence](docs/images/diagram3.svg)
 
 
 ---
