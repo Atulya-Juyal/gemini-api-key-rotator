@@ -14,21 +14,21 @@ These diagrams outline how the proxy leases keys and manages forwarding/retry st
 #### 1. Key Selection & Cooldown Management
 ```mermaid
 graph LR
-    A([Request Received]) --> B[KeyManager: getNextAvailableKey]
+    A[Request Received] --> B[KeyManager: getNextAvailableKey]
     B --> C{Key in Cooldown?}
     C -- Yes --> D{60s Elapsed?}
     D -- Yes --> E[Reset Cooldown & Lease Key]
     D -- No --> F[Select Next Key in Pool]
     F --> B
     C -- No --> G[Lease Key]
-    E --> H([Key Leased])
+    E --> H[Key Leased]
     G --> H
 ```
 
 #### 2. Request Forwarding & Retry Loop
 ```mermaid
 graph LR
-    H([Key Leased]) --> I[Forward Request to Google Gemini]
+    H[Key Leased] --> I[Forward Request to Google Gemini]
     I --> J{HTTP Response Status?}
     J -- 200 / 4xx / 5xx --> K[Forward Response to Client]
     J -- 429 Rate Limit --> L[Flag Key as Cooling Down]
