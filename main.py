@@ -25,7 +25,7 @@ def send_test_request():
         }]
     }
     try:
-        # We target the standard Gemini API path through our proxy
+        # We target the standard Gemini API path through our proxy 
         response = requests.post(
             f"{PROXY_URL}/v1/models/gemini-1.5-flash:generateContent",
             headers=headers,

@@ -1,7 +1,7 @@
 {
   "name": "gemini-key-rotator",
   "version": "1.0.0",
-  "description": "Gemini API Key Rotation Proxy",
+  "description": "Gemini API Key Rotation Proxy ",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",

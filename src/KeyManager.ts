@@ -1,5 +1,5 @@
 /**
- * Metadata for tracking individual Gemini API keys.
+ * Metadata for tracking individual Gemini API keys. 
  */
 export interface KeyMetadata {
   key: string;

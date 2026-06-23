@@ -1,4 +1,4 @@
-# Stage 1: Build stage
+# Stage 1: Build stage 
 FROM node:20-alpine AS builder
 
 WORKDIR /usr/src/app
