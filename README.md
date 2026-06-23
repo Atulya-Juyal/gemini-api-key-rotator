@@ -1,4 +1,4 @@
-# Gemini API Key Rotation Proxy
+# Gemini API Key Rotator
 
 A production-ready, lightweight reverse proxy written in Node.js and TypeScript. It intercepts incoming API calls, rotates sequentially through a pool of Google Gemini API keys using a round-robin strategy, isolates exhausted keys (`429 Too Many Requests`) with a 60-second cooldown window, and transparently retries requests within the same HTTP lifecycle.
 
